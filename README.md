@@ -1,12 +1,12 @@
 # XWiki-Checkboxed-Task-Macro
 This [XWiki](https://github.com/xwiki/xwiki-platform) macro adds a checkboxed **task with checkbox** macro and an event listener for ticking completed tasks off using the checkboxes
 
-## INstallation
+## Installation
 Download repository, unzip and import the .xar file in the [Wiki administration section](https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application) under "Content" -> "Import"
 
-## CKEditor
+## Configure CKEditor
 
-In order to make best use of it, add the following CKeditor configuration to your editor through the [dedicated "WYSIWYG Editor" section](https://extensions.xwiki.org/xwiki/bin/view/Extension/CKEditor%20Integration/#HAdministrationSection) in the [Wiki administration](https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application):
+In order to make best use of the macro, add the following CKeditor configuration to your editor through the [dedicated "WYSIWYG Editor" section](https://extensions.xwiki.org/xwiki/bin/view/Extension/CKEditor%20Integration/#HAdministrationSection) in the [Wiki administration](https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application):
 
 
 ```
