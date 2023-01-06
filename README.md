@@ -24,7 +24,7 @@ config['xwiki-macro'].insertButtons = [
 
 ## Macros and components 
 
-* **CheckboxedTask**: Contains the **checktask** macro that inserts checkboxed tasks in pages amd a JavaScirpt listener that listens for checking/unchecking events
+* **CheckboxedTask**: Contains the **checktask** macro that inserts checkboxed tasks in pages and a JavaScript listener that listens for checking/unchecking events
 * **CheckboxedTaskListener**: Event listener that listens for creating and updating tasks on pages, adding xobjects to the respective pages
 * **CheckboxUpdater**: Is called by the JavaScript listener to update the xobject of a task when checked or unchecked
 * **Task Class**:  Xobject class that defines the properties of tasks to be saved 
