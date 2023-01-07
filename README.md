@@ -26,6 +26,8 @@ config['xwiki-macro'].insertButtons = [
   }
 ];
 ```
+This adds a clickable icon for quick insertion of a task:
+![image](https://user-images.githubusercontent.com/8625511/211164104-d8602302-7c45-4229-bbab-bd2fb268b07c.png)
 
 ## Macros and components 
 
