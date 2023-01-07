@@ -1,5 +1,10 @@
 # XWiki-Checkboxed-Task-Macro
-This [XWiki](https://github.com/xwiki/xwiki-platform) macro adds a **task with checkbox** macro and an event listener for ticking completed tasks off using the checkboxes. Additionally there is a a configurable **task report** macro that lists tasks from a given space.
+This [XWiki](https://github.com/xwiki/xwiki-platform) macro adds a **task with checkbox** macro and an event listener for ticking completed tasks off using the checkboxes.
+![image](https://user-images.githubusercontent.com/8625511/211163903-8485e072-d8d3-4f5b-bb49-bef97553abad.png)
+
+Additionally there is a a configurable **task report** macro that lists tasks from a given space:
+![image](https://user-images.githubusercontent.com/8625511/211163840-a866e732-b274-4a72-9971-7e472ac22e44.png)
+
 
 ## Installation
 Head over to [Releases](https://github.com/jmiba/XWiki-Checkboxed-Task-Macro/releases), download the .xar file, and import it in the [Wiki administration section](https://extensions.xwiki.org/xwiki/bin/view/Extension/Administration%20Application) under "Content" -> "Import"
@@ -21,6 +26,8 @@ config['xwiki-macro'].insertButtons = [
   }
 ];
 ```
+This adds a clickable icon for quick insertion of a task:
+![image](https://user-images.githubusercontent.com/8625511/211164104-d8602302-7c45-4229-bbab-bd2fb268b07c.png)
 
 ## Macros and components 
 
