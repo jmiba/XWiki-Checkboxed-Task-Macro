@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package>
+  <infos>
+    <name>CheckboxedTask Macro</name>
+    <description/>
+    <licence>GPLV3</licence>
+    <author>xwiki:XWiki.mittelba</author>
+    <version>1.1</version>
+    <backupPack>false</backupPack>
+    <preserveVersion>false</preserveVersion>
+  </infos>
+  <files>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.CheckboxUpdater</file>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.TaskClass</file>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.TasksJSON</file>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.WebHome</file>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</file>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</file>
+    <file defaultAction="0" language="">Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome</file>
+    <file defaultAction="0" language="en">Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome</file>
+  </files>
+</package>

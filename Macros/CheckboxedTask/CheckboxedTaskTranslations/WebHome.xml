@@ -1,0 +1,114 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome" locale="">
+  <web>Macros.CheckboxedTask.CheckboxedTaskTranslations</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage>de</defaultLanguage>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.mittelba</creator>
+  <creationDate>1671560843000</creationDate>
+  <author>xwiki:XWiki.mittelba</author>
+  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
+  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
+  <date>1673104933000</date>
+  <contentUpdateDate>1673104933000</contentUpdateDate>
+  <version>6.2</version>
+  <title/>
+  <comment/>
+  <minorEdit>true</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>rendering.macro.checktask.name=Aufgabe mit Checkbox
+rendering.macro.checktask.description=Fügen Sie eine Aufgabe mit einem abhakbaren Kontrollkästchen hinzu.
+rendering.macro.checktask.content.description=Nennen Sie die zu erledigende Aufgabe.
+rendering.macro.checktask.parameter.dueDate.name=Fälligkeitsdatum
+rendering.macro.checktask.parameter.dueDate.description=Bis wann muss die Aufgabe erledigt sein?
+rendering.macro.checktask.parameter.responsible.name=Verantwortlich
+rendering.macro.checktask.parameter.responsible.description=Wer ist für die Erledigung zuständig?
+rendering.macro.checktask.parameter.done.name=Erledigt
+rendering.macro.checktask.parameter.done.description=Wurde die Aufgabe erledigt?
+rendering.macro.checktask.parameter.rid.name=RID
+rendering.macro.checktask.parameter.rid.description=Zufallsgenerierte ID zur Identifizierung der Aufgabe. Diese wird automatisch generiert. Vermeiden Sie die Einstellung und ändern Sie sie nicht!
+
+rendering.macro.reportchecktasks.name=Aufgabenbericht
+rendering.macro.reportchecktasks.description=Fügen Sie eine abhakbare Liste aller Aufgaben ein. Filtern Sie dabei nach Benutzer, Seite oder Seitenbereich.
+rendering.macro.reportchecktasks.parameter.responsible.name=Verantwortlich
+rendering.macro.reportchecktasks.parameter.responsible.description=Aufgaben dieses/r Benutzer*in anzeigen:
+rendering.macro.reportchecktasks.parameter.page.name=Seitenbereich
+rendering.macro.reportchecktasks.parameter.page.description=Aufgaben von dieser Seite und ihren Unterseiten anzeigen:
+rendering.macro.reportchecktasks.parameter.done.name=Erledigt
+rendering.macro.reportchecktasks.parameter.done.description=Setzen Sie diesen Wert auf 0 für nicht erledigte Aufgaben oder auf 1 für erledigte Aufgaben. Wenn Sie sowohl unerledigte als auch erledigte Aufgaben in Ihrem Bericht sehen möchten, setzen Sie diesen Wert auf 2. Der Standardwert für diese Einstellung ist 0.
+rendering.macro.reportchecktasks.parameter.filters.description=Anstelle von festen Abfrageparametern können Sie anpassbare Filter für die Abfrage verwenden. Verwenden Sie dies, wenn Sie einen umfassenden filterbaren Aufgabenbericht wünschen. Verwenden Sie diese Parameter: done, responsible, dueDate, page. Verketten Sie sie mit &amp;. Beispiel: done=0&amp;responsible=username&amp;dueDate=01.01.2023-31.03.2023&amp;page=Main.WebHome
+rendering.macro.reportchecktasks.parameter.project.name=Projekt/Arbeitsgruppe
+rendering.macro.reportchecktasks.parameter.project.description=Zusätzlich Aufgaben aus Projekt/Arbeitsgruppe anzeigen:
+
+reportchecktasks.macro.report0=Aufgabenbericht
+reportchecktasks.macro.report1=Alle
+reportchecktasks.macro.report2=Unerledigte
+reportchecktasks.macro.report3=Erledigte
+reportchecktasks.macro.report4=Aufgaben
+reportchecktasks.macro.report5=im Seitenbereich
+reportchecktasks.macro.report6=und
+reportchecktasks.macro.report7=in Projekt/Arbeitgruppe
+reportchecktasks.macro.report8=im XWiki
+reportchecktasks.macro.tooltip0=Markieren Sie diese Aufgabe als erledigt
+reportchecktasks.macro.tooltip1=Markieren Sie diese Aufgabe als unerledigt
+reportchecktasks.macro.warning=Sie können das Makro "Aufgabenbericht" nur einmal pro Seite einfügen. Bitte konfigurieren Sie die erste Instanz des Makros so, dass alle benötigten Informationen angzeigt werden.
+
+checktask.macro.dateFormat=dd.MM.yyyy
+checktask.macro.hint=Sie können Aufgaben durch Abhaken als erledigt markieren.
+checktask.macro.progress=Aufgabenstatus wird aktualisiert
+checktask.macro.success1=Sie haben die Aufgabe
+checktask.macro.success2=markiert
+checktask.macro.result0=Aufgabe
+checktask.macro.result1=erledigt
+checktask.macro.result2=unerledigt
+checktask.macro.error=Fehler beim Speichern des Aufgabenstatus
+checktask.macro.toDo=zu erledigen
+checktask.macro.byWhen=bis
+checktask.macro.byWho=von
+
+reportchecktasks.table.emptyValue=ohne
+reportchecktasks.table.done=Erledigt
+reportchecktasks.table.page=Seite
+reportchecktasks.table.task=Aufgabe
+reportchecktasks.table.responsible=Verantwortlich
+reportchecktasks.table.dueDate=Fällig</content>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskTranslations.WebHome</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>9cc1701b-0f5f-47a7-8cdb-cc72ecfbb1f3</guid>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+</xwikidoc>

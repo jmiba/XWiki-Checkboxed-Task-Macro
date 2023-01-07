@@ -1,0 +1,801 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskReport.WebHome" locale="">
+  <web>Macros.CheckboxedTask.CheckboxedTaskReport</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.mittelba</creator>
+  <creationDate>1671560843000</creationDate>
+  <parent>Macros.CheckboxedTask.WebHome</parent>
+  <author>xwiki:XWiki.mittelba</author>
+  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
+  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
+  <date>1673112164000</date>
+  <contentUpdateDate>1671713063000</contentUpdateDate>
+  <version>3.17</version>
+  <title>CheckboxedTaskReport</title>
+  <comment/>
+  <minorEdit>true</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>This is the **task report** macro. It collects task by user, completion status or page space in a sortable tick-off list. It is based on the [[live data macro>>https://extensions.xwiki.org/xwiki/bin/view/Extension/Live%20Data%20Macro/]].</content>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>a5767243-4e57-4a37-a27f-cd3d686a9527</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <defaultValue>long</defaultValue>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>currentPage|onDemand|always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>#set($hint = $services.localization.render('checktask.macro.hint'))
+#set($progress = $services.localization.render('checktask.macro.progress'))
+#set($success1 = $services.localization.render('checktask.macro.success1'))
+#set($success2 = $services.localization.render('checktask.macro.success2'))
+#set($error = $services.localization.render('checktask.macro.error'))
+
+//Ajax function: update task objects through page CheckboxUpdater
+require(['jquery'], function ($) {
+  function init() {
+  var msg = new XWiki.widgets.Notification("$hint", 'info');
+  var taskTable = $('#tasksLiveData');
+  if (taskTable){
+    taskTable.on("xwiki:livedata:entriesUpdated", function(event){
+    //console.log( event.detail.livedata);
+    //console.log(taskTable);
+    var checkboxes = $('input[name="checktask"]');
+    //enable task checkboxes
+    for(ind=0;ind&lt;checkboxes.length;ind++){
+         checkboxes[ind].removeAttribute('disabled');
+      }
+    // add a change event listener
+    for (var i = 0; i &lt; checkboxes.length; i++) {
+      checkboxes[i].addEventListener('change', function() {
+        updateTask(this.dataset.page, this.value, this.checked)
+      });
+     }
+    });
+   }
+  }
+ (XWiki &amp;&amp; XWiki.domIsLoaded &amp;&amp; init()) || document.observe("xwiki:dom:loaded", init);
+  
+  function updateTask(page,task,checked){
+    var Url = new XWiki.Document('CheckboxUpdater','Macros.CheckboxedTask').getURL('get');
+    var UrlParams = { 'xpage': 'plain','outputSyntax': 'plain', 'page' : page, 'task' : task, 'checked' : checked };
+    //console.log(UrlParams);
+    //console.log(Url);
+    var notification =new XWiki.widgets.Notification("$progress ...", 'inprogress');
+    $.post(Url, UrlParams, function( response, status, xhr ) {
+      notification.replace(new XWiki.widgets.Notification("$success1 &lt;b>"+ response.task + "&lt;/b> als &lt;i>" + response.result + "&lt;/i> $success2",'done'));
+     if ( status == "error" ) {
+       var msg = "$error: ";
+       notification.replace(new XWiki.widgets.Notification(msg + xhr.status + " " + xhr.statusText,'error'));
+        }
+      });
+  }
+
+  //Errors to be logged in console
+  $(document).ajaxError(function(event, jqxhr, settings, message)
+  {
+      console.log(message);
+  });
+}); //end jquery
+</code>
+    </property>
+    <property>
+      <name>Task Report JS</name>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>onDemand</use>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <number>0</number>
+    <className>XWiki.WikiMacroClass</className>
+    <guid>1768933a-bab0-4ab6-80ce-54895c6de7f3</guid>
+    <class>
+      <name>XWiki.WikiMacroClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <async_cached>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType/>
+        <name>async_cached</name>
+        <number>13</number>
+        <prettyName>Cached</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </async_cached>
+      <async_context>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>1</multiSelect>
+        <name>async_context</name>
+        <number>14</number>
+        <prettyName>Context elements</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>, </separator>
+        <separators>|, </separators>
+        <size>5</size>
+        <unmodifiable>0</unmodifiable>
+        <values>action=Aktion|doc.reference=Seite|icon.theme=Icon-Theme|locale=Sprache|rendering.defaultsyntax=Standard-Syntax|rendering.restricted=Eingeschränkt|rendering.targetsyntax=Zielsyntax|request.base=Basis-URL der Anfrage|request.cookies|request.headers|request.parameters=Parameter in der Anfrage|request.remoteAddr|request.url=URL der Anfrage|request.wiki=Wiki laut Anfrage|user=Benutzer|wiki=Wiki</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </async_context>
+      <async_enabled>
+        <defaultValue>0</defaultValue>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType/>
+        <name>async_enabled</name>
+        <number>12</number>
+        <prettyName>Asynchronous rendering</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </async_enabled>
+      <code>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>code</name>
+        <number>10</number>
+        <prettyName>Macro code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <contentDescription>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>contentDescription</name>
+        <number>9</number>
+        <prettyName>Content description (Not applicable for "No content" type)</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </contentDescription>
+      <contentJavaType>
+        <cache>0</cache>
+        <defaultValue>Unknown</defaultValue>
+        <disabled>0</disabled>
+        <displayType>input</displayType>
+        <freeText>allowed</freeText>
+        <largeStorage>1</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>contentJavaType</name>
+        <number>8</number>
+        <picker>1</picker>
+        <prettyName>Macro content type</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Unknown|Wiki</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentJavaType>
+      <contentType>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>contentType</name>
+        <number>7</number>
+        <prettyName>Macro content availability</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Optional|Mandatory|No content</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </contentType>
+      <defaultCategories>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>input</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>1</multiSelect>
+        <name>defaultCategories</name>
+        <number>4</number>
+        <prettyName>Default categories</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values/>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </defaultCategories>
+      <defaultCategory>
+        <disabled>0</disabled>
+        <name>defaultCategory</name>
+        <number>4</number>
+        <prettyName>Default category</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultCategory>
+      <description>
+        <contenttype>PureText</contenttype>
+        <disabled>0</disabled>
+        <editor>PureText</editor>
+        <name>description</name>
+        <number>3</number>
+        <prettyName>Macro description</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <id>
+        <disabled>0</disabled>
+        <name>id</name>
+        <number>1</number>
+        <prettyName>Macro id</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </id>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>2</number>
+        <prettyName>Macro name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <priority>
+        <disabled>0</disabled>
+        <name>priority</name>
+        <number>11</number>
+        <numberType>integer</numberType>
+        <prettyName>Priority</prettyName>
+        <size>10</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.NumberClass</classType>
+      </priority>
+      <supportsInlineMode>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>supportsInlineMode</name>
+        <number>5</number>
+        <prettyName>Supports inline mode</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </supportsInlineMode>
+      <visibility>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>visibility</name>
+        <number>6</number>
+        <prettyName>Macro visibility</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator>|</separator>
+        <separators>|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>Current User|Current Wiki|Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </visibility>
+    </class>
+    <property>
+      <async_cached>0</async_cached>
+    </property>
+    <property>
+      <async_context>
+        <value>doc.reference</value>
+      </async_context>
+    </property>
+    <property>
+      <async_enabled>0</async_enabled>
+    </property>
+    <property>
+      <code>{{velocity}}
+## First, set a counter for how often the macro is used in the document. The number is needed for the input field.
+#if(!$reportCounter)
+  #set($reportCounter = 0)
+  #if("$xcontext.action" != "edit")
+    #set ($discard = $xwiki.jsx.use('Macros.CheckboxedTask.CheckboxedTaskReport.WebHome'))
+  #end
+  #set ($discard = $xwiki.ssx.use('Macros.CheckboxedTask.WebHome'))
+  
+  ##Lets look for the macro parameters
+  #set($header ="==$services.localization.render('reportchecktasks.macro.report0')")
+  #set($sourceParams ="")
+  #if($xcontext.macro.params.responsible)
+    #set($responsible = "$!xcontext.macro.params.responsible")
+    #set($person = $xwiki.getDocument($responsible))
+    #set($object = $person.getObject('XWiki.XWikiUsers'))
+    #set($name = "${object.get('first_name')} ${object.get('last_name')}")
+    #set($sourceParams = "&amp;responsible=$responsible")
+    #set($header ="$header $name==")
+  #else
+    #set($header ="$header==")
+  #end
+  #if($xcontext.macro.params.done)
+    #set($done = "$!xcontext.macro.params.done")
+    #if($done == 0 || $done== 1)
+      #set($sourceParams = "$sourceParams&amp;done=$done")
+      #if($done == 0) #set($header1 ="===$services.localization.render('reportchecktasks.macro.report2')")#else #set($header1 ="===$services.localization.render('reportchecktasks.macro.report3')")#end
+    #elseif ($done == 2)
+      #set($header1 = "===$services.localization.render('reportchecktasks.macro.report1')")
+    #else
+      #set($done=0)
+      #set($sourceParams = "$sourceParams&amp;done=$done")
+      #set($header1 = "===$services.localization.render('reportchecktasks.macro.report2')")
+    #end
+  #else
+     #set($done=0)
+     #set($sourceParams = "$sourceParams&amp;done=$done")
+     #set($header1 = "===$services.localization.render('reportchecktasks.macro.report2')")
+  #end
+  #if($xcontext.macro.params.page || $xcontext.macro.params.project)
+    #if($xcontext.macro.params.page)
+      #set($page = "$!xcontext.macro.params.page")
+      #if($page.endsWith(".WebHome"))
+        #set($sourceParams = "$sourceParams&amp;page=$xwiki.getDocument($page).space")
+      #else
+         #set($sourceParams = "$sourceParams&amp;page=$xwiki.getDocument($page)")
+      #end
+      #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report5') [[$xwiki.getDocument($page).title>>$page]]")
+    #end
+    #if($xcontext.macro.params.project)
+      #set($project = "$!xcontext.macro.params.project")
+      #set($sourceParams = "$sourceParams&amp;project=$xwiki.getDocument($project)")
+      #if(!$xcontext.macro.params.page) 
+        #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report7') [[$xwiki.getDocument($project).title>>$project]]===")
+      #else
+        #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report6') $services.localization.render('reportchecktasks.macro.report7') [[$xwiki.getDocument($project).title>>$project]]===")
+      #end
+    #end
+  #else 
+    #set($header1 ="$header1 $services.localization.render('reportchecktasks.macro.report4') $services.localization.render('reportchecktasks.macro.report8')===")
+  #end
+  $header
+  $header1
+  ##$sourceParams
+  ##$filters
+  ##$responsible
+  #if($xcontext.macro.params.filters)
+    #set($filters = "$!xcontext.macro.params.filters")
+  #end
+  {{liveData
+    id="tasksLiveData"
+    properties="🗹,task,dueDate,responsible,page"
+    source="liveTable"
+    #if($filters)filters="$filters"#end
+    sourceParameters="resultPage=Macros.CheckboxedTask.TasksJSON&amp;translationPrefix=reportchecktasks.table.&amp;className=XWiki.XWikiUsers#if($sourceParams)$sourceParams#end"
+    sort="dueDate:asc"
+    limit="10"
+  }}{
+    "meta": {
+      "propertyDescriptors": [
+        {
+          "id": "🗹",
+          "displayer": "html",
+          "sortable": true,
+          "filterable": false
+        },
+        {
+          "id": "task",
+          "displayer": "html",
+          "sortable": true,
+          "filterable": false
+        },
+        {
+          "id": "page",
+          "displayer": "html",
+          "sortable": true,
+          "filterable": false,
+          "visible": true,
+          "filter": {"id":"list", "match": "prefix" }
+        },
+        {
+          "id": "dueDate",
+          "displayer": "html",
+          "sortable": true,
+          "filterable": false,
+          "filter": {"id":"date" }
+        },
+        {
+          "id": "responsible",
+          "displayer": {"id": "link", "propertyHref": "profile"},
+          "sortable": true,
+          "filterable": false,
+          "filter": {"id":"list", "match": "prefix" },
+          "class": "XWiki.XWikiUsers"#if($responsible),
+          "visible": false#end
+       }
+      ]
+    }
+  }{{/liveData}}
+#else
+  #set($reportCounter = $reportCounter + 1)
+  {{warning}}
+  $services.localization.render('reportchecktasks.macro.warning')
+  {{/warning}}
+#end
+{{/velocity}}</code>
+    </property>
+    <property>
+      <contentDescription></contentDescription>
+    </property>
+    <property>
+      <contentJavaType></contentJavaType>
+    </property>
+    <property>
+      <contentType>No content</contentType>
+    </property>
+    <property>
+      <defaultCategories>
+        <value>Content</value>
+      </defaultCategories>
+    </property>
+    <property>
+      <defaultCategory>Social</defaultCategory>
+    </property>
+    <property>
+      <description>Insert a list of tasks belonging to a user, a page or a space</description>
+    </property>
+    <property>
+      <id>reportchecktasks</id>
+    </property>
+    <property>
+      <name>Task Report</name>
+    </property>
+    <property>
+      <priority/>
+    </property>
+    <property>
+      <supportsInlineMode>0</supportsInlineMode>
+    </property>
+    <property>
+      <visibility>Current Wiki</visibility>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <number>0</number>
+    <className>XWiki.WikiMacroParameterClass</className>
+    <guid>038116d4-bdb6-4e40-a8da-277f5ccbc548</guid>
+    <class>
+      <name>XWiki.WikiMacroParameterClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <defaultValue>
+        <disabled>0</disabled>
+        <name>defaultValue</name>
+        <number>4</number>
+        <prettyName>Parameter default value</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultValue>
+      <description>
+        <disabled>0</disabled>
+        <name>description</name>
+        <number>2</number>
+        <prettyName>Parameter description</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <mandatory>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>mandatory</name>
+        <number>3</number>
+        <prettyName>Parameter mandatory</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </mandatory>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Parameter name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <disabled>0</disabled>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Parameter type</prettyName>
+        <size>60</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </type>
+    </class>
+    <property>
+      <defaultValue></defaultValue>
+    </property>
+    <property>
+      <description>Show the tasks of this user:</description>
+    </property>
+    <property>
+      <mandatory/>
+    </property>
+    <property>
+      <name>responsible</name>
+    </property>
+    <property>
+      <type>org.xwiki.user.UserReference</type>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <number>5</number>
+    <className>XWiki.WikiMacroParameterClass</className>
+    <guid>93b9c136-ceb7-420e-b333-8c574a12acf7</guid>
+    <class>
+      <name>XWiki.WikiMacroParameterClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <defaultValue>
+        <disabled>0</disabled>
+        <name>defaultValue</name>
+        <number>4</number>
+        <prettyName>Parameter default value</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultValue>
+      <description>
+        <disabled>0</disabled>
+        <name>description</name>
+        <number>2</number>
+        <prettyName>Parameter description</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <mandatory>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>mandatory</name>
+        <number>3</number>
+        <prettyName>Parameter mandatory</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </mandatory>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Parameter name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <disabled>0</disabled>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Parameter type</prettyName>
+        <size>60</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </type>
+    </class>
+    <property>
+      <defaultValue></defaultValue>
+    </property>
+    <property>
+      <description>Show tasks from this page and its subpages:</description>
+    </property>
+    <property>
+      <mandatory/>
+    </property>
+    <property>
+      <name>page</name>
+    </property>
+    <property>
+      <type>org.xwiki.model.reference.DocumentReference</type>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskReport.WebHome</name>
+    <number>6</number>
+    <className>XWiki.WikiMacroParameterClass</className>
+    <guid>8e8ebe92-0f9c-4599-a0b3-ed06a3f71a93</guid>
+    <class>
+      <name>XWiki.WikiMacroParameterClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <defaultValue>
+        <disabled>0</disabled>
+        <name>defaultValue</name>
+        <number>4</number>
+        <prettyName>Parameter default value</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </defaultValue>
+      <description>
+        <disabled>0</disabled>
+        <name>description</name>
+        <number>2</number>
+        <prettyName>Parameter description</prettyName>
+        <restricted>0</restricted>
+        <rows>5</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </description>
+      <mandatory>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>mandatory</name>
+        <number>3</number>
+        <prettyName>Parameter mandatory</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </mandatory>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Parameter name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <type>
+        <disabled>0</disabled>
+        <name>type</name>
+        <number>5</number>
+        <prettyName>Parameter type</prettyName>
+        <size>60</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </type>
+    </class>
+    <property>
+      <defaultValue></defaultValue>
+    </property>
+    <property>
+      <description>Set this to 0 for unfinished tasks or to 1 for finished tasks. If you want to see both unfisnished and finished tasks in your report, set this to 2. This setting defaults to 0.</description>
+    </property>
+    <property>
+      <mandatory/>
+    </property>
+    <property>
+      <name>done</name>
+    </property>
+    <property>
+      <type></type>
+    </property>
+  </object>
+</xwikidoc>

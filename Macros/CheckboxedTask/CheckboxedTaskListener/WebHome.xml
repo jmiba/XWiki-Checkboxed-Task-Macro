@@ -1,0 +1,510 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxedTaskListener.WebHome" locale="">
+  <web>Macros.CheckboxedTask.CheckboxedTaskListener</web>
+  <name>WebHome</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.mittelba</creator>
+  <creationDate>1671560843000</creationDate>
+  <parent>Macros.CheckboxedTask.WebHome</parent>
+  <author>xwiki:XWiki.mittelba</author>
+  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
+  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
+  <date>1673039804000</date>
+  <contentUpdateDate>1671713063000</contentUpdateDate>
+  <version>3.1</version>
+  <title>CheckboxedTaskListener</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>This is the event listener that checks pages for the creation, modification or deletion of tasks using the **CheckboxedTask** macro and saves the corresponding tasks as objects to the pages.</content>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>1</number>
+    <className>XWiki.ComponentClass</className>
+    <guid>d864bea5-7b2b-4d3a-b679-6dce97bc56ed</guid>
+    <class>
+      <name>XWiki.ComponentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <roleHint>
+        <disabled>0</disabled>
+        <name>roleHint</name>
+        <number>2</number>
+        <prettyName>Component Role Hint</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </roleHint>
+      <roleType>
+        <disabled>0</disabled>
+        <name>roleType</name>
+        <number>1</number>
+        <prettyName>Component Role Type</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </roleType>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <freeText>forbidden</freeText>
+        <largeStorage>0</largeStorage>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>3</number>
+        <prettyName>Component Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>wiki=Current Wiki|user=Current User|global=Global</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <property>
+      <roleHint>CheckboxedTaskListener</roleHint>
+    </property>
+    <property>
+      <roleType>org.xwiki.observation.EventListener</roleType>
+    </property>
+    <property>
+      <scope>wiki</scope>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>0</number>
+    <className>XWiki.ComponentDependencyClass</className>
+    <guid>4577dd87-a2b7-4ac4-8f7d-2899b90ca409</guid>
+    <class>
+      <name>XWiki.ComponentDependencyClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <bindingName>
+        <disabled>0</disabled>
+        <name>bindingName</name>
+        <number>3</number>
+        <prettyName>Binding name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </bindingName>
+      <roleHint>
+        <disabled>0</disabled>
+        <name>roleHint</name>
+        <number>2</number>
+        <prettyName>Dependency Role Hint</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </roleHint>
+      <roleType>
+        <disabled>0</disabled>
+        <name>roleType</name>
+        <number>1</number>
+        <prettyName>Dependency Role Type</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </roleType>
+    </class>
+    <property>
+      <bindingName>observationManager</bindingName>
+    </property>
+    <property>
+      <roleHint>default</roleHint>
+    </property>
+    <property>
+      <roleType>org.xwiki.observation.ObservationManager</roleType>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>0</number>
+    <className>XWiki.ComponentInterfaceClass</className>
+    <guid>cb5d6760-2ff3-48e6-aae2-d27ee3a91e5a</guid>
+    <class>
+      <name>XWiki.ComponentInterfaceClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Interface Qualified Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <name>org.xwiki.component.phase.Disposable</name>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>0</number>
+    <className>XWiki.ComponentMethodClass</className>
+    <guid>4d59b704-3050-4a8f-bb23-b3d6e67876de</guid>
+    <class>
+      <name>XWiki.ComponentMethodClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <code>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Method body code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Method name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <code>{{groovy}}
+import org.xwiki.bridge.event.*
+
+xcontext.method.output.value = [new DocumentCreatingEvent(), new DocumentUpdatingEvent()]
+{{/groovy}}</code>
+    </property>
+    <property>
+      <name>getEvents</name>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>1</number>
+    <className>XWiki.ComponentMethodClass</className>
+    <guid>d24eac3c-8d5c-4d19-bd69-89705e72343b</guid>
+    <class>
+      <name>XWiki.ComponentMethodClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <code>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Method body code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Method name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <code>{{groovy}}
+xcontext.method.output.value = "CheckboxedTaskListener"
+{{/groovy}}</code>
+    </property>
+    <property>
+      <name>getName</name>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>2</number>
+    <className>XWiki.ComponentMethodClass</className>
+    <guid>6754d686-87d6-434f-bbba-74e6dab0b5f4</guid>
+    <class>
+      <name>XWiki.ComponentMethodClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <code>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Method body code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Method name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <code>{{groovy}}
+def docSource = xcontext.method.input.get(1)
+def context = xcontext.method.input.get(2)
+
+def debug = 0;
+
+if (!docSource.space.startsWith("Macros")) {
+  def source = docSource.content
+  def pattern= ~/(?s)\{\{checktask(.*?)\}\}(.*?)\{\{\/checktask\}\}/
+  def params = []
+  def tasks = []
+  (source =~ pattern).each { 
+    tasks&lt;&lt;it[2].trim()
+    params&lt;&lt;it[1]
+  }
+
+  if (tasks) {
+    def generator = { String alphabet, int n ->
+      new Random().with {
+        (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
+      }
+    }
+
+    def resp = []
+    def due = []
+    def rid = []
+    def newParams = []
+    
+     // Create a list of date formats to try
+    def dateFormats = [
+      "yyy-dd-MM",
+      "yyyy-MM-dd",
+      "dd/MM/yyyy",
+      "MM/dd/yyyy",
+      "yyyy/dd/MM",
+      "yyyy/MM/dd",
+      "dd.MM.yyyy"
+    ]
+
+    for (para in params){
+      resp&lt;&lt;((para =~ /responsible="(.*?)"/).collect {it[1]}.join(","))
+      due&lt;&lt;((para =~ /dueDate="(.*?)"/).collect {
+        // Flag to track whether the date was successfully parsed
+        def success = false
+        // Try parsing the date with each format
+        dateFormats.each { format ->
+            try {
+                date = new java.text.SimpleDateFormat(format).parse(it[1])
+                dueDate = date.format('yyyy/MM/dd')
+                success = true
+                return
+            } catch (java.text.ParseException e) {
+                // Do nothing, just move on to the next format
+            }
+        }
+        // If no formats were successful, print an error message
+        if (!success) {
+            dueDate = it[1]
+        }
+        dueDate
+      }.join(","))
+      ri = (para =~ /rid="(.*?)"/).collect { it[1]}.join(",")
+      if(ri==""){
+        gen=generator( (('a'..'z')+('0'..'9')).join(), 3 )+'-'+System.currentTimeMillis()
+        para+=" rid=\"$gen\""
+        rid&lt;&lt;gen
+      } else {
+        rid&lt;&lt;ri
+      }
+      // replacing the due date with a simple format would be nice but then the macro parameter does not work properly anmore since it expects the xwiki's default date format as defined in the admin section:
+      //para = para.replaceAll(/dueDate="(.*?)"/, 'dueDate="'+dueDate+'"')
+      newParams&lt;&lt;para
+    }
+
+    int i = 0
+    String newSource = source.replaceAll(~/(?s)\{\{checktask(.*?)\}\}/, '{{checktask}}')
+    (newSource =~ pattern).each {
+        int ind = newSource.indexOf('{{checktask}}');
+        if( ind>=0 )
+        newSource = new StringBuilder(newSource.length()+newParams[i].length())
+                    .append(newSource, 0, ind+11)
+                    .append(newParams[i])
+                    .append(newSource, ind+11, newSource.length())
+                    .toString();
+        i++
+    }
+
+    //Saving to objects
+    int objStart = 0
+    int objEnd = 0
+    int objCount = 0
+    def obj = docSource.getObjects("Macros.CheckboxedTask.TaskClass")
+    if (obj) {
+      objEnd = docSource.getObjectNumbers("Macros.CheckboxedTask.TaskClass")+1
+      objStart = objEnd - obj.size()
+      objCount = obj.size()
+    }
+    int ridFound = 0
+    int newObjs = 0
+    i = 0
+
+    while(i&lt;tasks.size()){
+      oobj = docSource.getObject("Macros.CheckboxedTask.TaskClass","rid",rid[i])
+      dueDate = due[i]
+      if(oobj){                                   //update object with corresponding rid
+        oobj.set("task", tasks[i], context)
+        oobj.set("responsible", resp[i], context)
+        oobj.set("dueDate", dueDate, context)
+        oobj.set("protected", "1", context)
+        oobj.getStringValue("done")==""? oobj.set("done", "0", context) : void
+        ridFound++
+      } else {                                     //create object with new rid
+        newObj=docSource.newObject("Macros.CheckboxedTask.TaskClass", context)
+        newObj.set("task", tasks[i], context)
+        newObj.set("responsible", resp[i], context)
+        newObj.set("dueDate", dueDate, context)
+        newObj.set("rid", rid[i], context)
+        newObj.set("protected", "1", context)
+        newObj.set("done", "0", context)
+        newObjs++
+      }
+      i++
+    }
+    i=0
+    int remObjs = 0
+    while(i&lt;=objCount){
+      remObj = docSource.getObject("Macros.CheckboxedTask.TaskClass","protected","")
+      if(remObj){
+        docSource.removeObject(remObj)
+        remObjs++
+      }
+      i++
+    }
+    i=0
+    while(i&lt;=objCount){
+      remObj = docSource.getObject("Macros.CheckboxedTask.TaskClass","protected","0")
+      if(remObj){
+        docSource.removeObject(remObj)
+        remObjs++
+      }
+      i++
+    }
+    i=0
+    while(i&lt;tasks.size()){
+      unprotectObj = docSource.getObject("Macros.CheckboxedTask.TaskClass","protected","1")
+      if(unprotectObj){
+        unprotectObj.set("protected","0", context)
+      }
+      i++
+    }
+    
+    debug==1? docSource.setContent(newSource + "\nDebug:  Objektzähler: ${objCount};  RID gefunden/Task upgedated: ${ridFound}; neu angelegt: ${newObjs}; gelöscht ${remObjs}.\n\n") :docSource.setContent(newSource)
+  } else { 
+    def objs = docSource.getObjects("Macros.CheckboxedTask.TaskClass")
+    def objt = 0
+    if(objs != null) {
+      objt = objs.size()
+      docSource.removeObjects("Macros.CheckboxedTask.TaskClass")
+    } else {
+      objt = 0
+    }
+      //docSource.setContent(docSource.content + "\n\n{{{Debug: No tasks detected! ${objs} task objects deleted }}} \n")
+      debug==1? docSource.setContent(docSource.content + "\n\n{{{Debug: No tasks detected! ${objt} task objects deleted }}} \n") : void //never switch this on, you don't want to modify existing pages that have no tasks!
+  }
+}
+{{/groovy}}</code>
+    </property>
+    <property>
+      <name>onEvent</name>
+    </property>
+  </object>
+  <object>
+    <name>Macros.CheckboxedTask.CheckboxedTaskListener.WebHome</name>
+    <number>3</number>
+    <className>XWiki.ComponentMethodClass</className>
+    <guid>1dd46abb-c596-4d97-ac36-8d85d63da081</guid>
+    <class>
+      <name>XWiki.ComponentMethodClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <code>
+        <disabled>0</disabled>
+        <editor>Text</editor>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Method body code</prettyName>
+        <restricted>0</restricted>
+        <rows>20</rows>
+        <size>40</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Method name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+    </class>
+    <property>
+      <code>{{groovy}}
+System.out.println("Checkboxed Task Listener unregistered, it will now be registered again")
+xcontext.method.observationManager.removeListener("CheckboxedTaskListener")
+{{/groovy}}</code>
+    </property>
+    <property>
+      <name>dispose</name>
+    </property>
+  </object>
+</xwikidoc>

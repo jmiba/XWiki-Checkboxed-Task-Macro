@@ -1,0 +1,195 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.TasksJSON" locale="">
+  <web>Macros.CheckboxedTask</web>
+  <name>TasksJSON</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.mittelba</creator>
+  <creationDate>1671560843000</creationDate>
+  <parent>WebHome</parent>
+  <author>xwiki:XWiki.mittelba</author>
+  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
+  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
+  <date>1673110480000</date>
+  <contentUpdateDate>1673110447000</contentUpdateDate>
+  <version>4.3</version>
+  <title>TasksJSON</title>
+  <comment/>
+  <minorEdit>true</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity wiki="false"}}
+#if("$!{request.xpage}" == 'plain')
+  $response.setContentType('application/json')
+#end
+##==============================
+## Offset = item # at which to start displaying data
+##==============================
+#set ($offset = $numbertool.toNumber($request.offset).intValue())
+## If no offset is specified, start at 0.
+#if (!$offset)
+  #set ($offset = 0)
+#else
+  ## The offset sent by the live table widget starts from 1.
+  #set ($offset = $mathtool.max($offset, 1) - 1)
+#end
+##==================
+## Limit = # of items to display
+##==================
+#set($limit = $mathtool.max($numbertool.toNumber($request.limit).intValue(), 0))
+## If no limit is specified, limit at 10 items
+#if (!$limit)
+  #set ($limit = 10)
+#end
+##==================
+## Tag = one parameter per tag
+##==================
+#if($request.tag)
+  #foreach($tag in $request.getParameterValues('tag'))
+    ## TODO: Add code to filter items based on the selected tags
+  #end
+#end
+##==========
+## Sort direction
+##==========
+#set($order = "$!request.sort")
+#set($sortClause = "")
+#if($order != '')
+  #set($orderDirection = "$!{request.get('dir').toLowerCase()}")
+  #if("$!orderDirection" != '' &amp;&amp; "$!orderDirection" != 'asc')
+    #set($orderDirection = 'desc')
+  #end
+  #if ($order == "page")
+    #set ($sortClause = "order by doc.title $orderDirection")
+  #elseif ($order == "responsible")
+    #set ($sortClause = "order by task.responsible $orderDirection")
+  #elseif ($order == "dueDate")
+    #set ($sortClause = "order by task.dueDate $orderDirection")
+  #elseif ($order == "task")
+    #set ($sortClause = "order by task.task $orderDirection")
+  #elseif ($order == "🗹")
+    #set ($sortClause = "order by task.done $orderDirection")
+  #end
+#end
+## ===========
+## Filters
+## ===========
+#set ($pageFilter = "$!{request.page}%")
+#if("$!{pageFilter}" != '%') 
+  #set($inClause = "and doc.fullName like '$pageFilter'")
+#else
+  #set($inClause = "")
+#end
+## Handle hidden documents. Note that we cannot use the "hidden" filter since it seems it works only on short form queries or queries on Documents
+#set ($hiddenClause = '')
+#if($xwiki.getDocument($xcontext.user).getValue('displayHiddenDocuments') != 1)
+  #set ($hiddenClause = "and (doc.hidden &lt;&gt; true or doc.hidden is null)")
+#end
+###################
+#set ($projectFilter = "$!{request.project}")
+#if("$!{projectFilter}" != '')
+## This is a special query parameter for an additional object present on the pages to be queried. 
+## This lets you configure the task report macro so you can query pages within an App-within-a-minute database for one of their object properties. 
+## To activate this dormant feature you need to add an additional macro parameter "project" in the CheckboxedTaskReport macro. 
+## Set the parameter type to "org.xwiki.model.reference.DocumentReference".
+## Note: The reportchecktasks macro expects the value of this property to be a document reference!
+## Then, the following class reference and the property reference need to be changed according to the additional object class that should be looked for:
+  #set($projectProperty = "projectPage")                         ## adjust property of object!
+  #set($class = "Protokoll.Code.ProtokollClass")                 ## adjust class of object!
+## -----------------
+  #set($projectClause = "project.${projectProperty} = '${projectFilter}'")
+  ## Compute pages linked with a project and build inClause
+  #set ($inQuery = $services.query.xwql("from doc.object($class) as project where $projectClause $hiddenClause").execute())
+  #if("$!{pageFilter}" == '%') 
+    #set ($inClause = "and doc.fullName in (") 
+  #else 
+    #set($inClause = "$inClause or doc.fullName in (") 
+  #end
+  #foreach ($item in $inQuery)
+    #set ($inClause=$inClause+"'"+$item+"'")
+    #if( $foreach.hasNext )#set ($inClause=$inClause+",") #else #set ($inClause=$inClause+")")#end
+  #end
+#else
+  #set ($inClause="$inClause")
+#end
+####################
+#set ($taskFilter = "%$!{request.task.toLowerCase()}%")
+#set ($responsibleFilter = "%$!{request.responsible}%")
+#set($dateFilter = "$!{request.dueDate}")
+#set($date = '')
+#if("$!{dateFilter}" != '')
+  #set($dates = $dateFilter.split('-'))
+  #if($dates.size() == 2)
+    ## Date range matching
+    #set($date = "and task.dueDate between '${dates[0]}' and '${dates[1]}'")
+  #else
+    ## Single value matching
+    #set($date = "and task.dueDate like '%${dateFilter}%'")
+  #end
+#end
+#if (!$request.done) #set ($doneClause ="")#else #set($doneClause = " and task.done = "+"'$!{request.done}'")#end
+## Compute the total number of entries
+#set ($countQuery="select count(doc.id) from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause $sortClause")
+#set ($count = $services.query.xwql($countQuery).bindValue("taskFilter", $taskFilter).bindValue("responsibleFilter", $responsibleFilter).execute())
+## Compute the entries to display
+#set ($resultsQuery="select doc.fullName, task.done, task.rid, task.task, task.dueDate, task.responsible from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause $sortClause")
+#set ($result = $services.query.xwql($resultsQuery).bindValue("taskFilter", $taskFilter).bindValue("responsibleFilter", $responsibleFilter).setLimit($limit).setOffset($offset).execute())
+## =============
+## Generate the JSON
+## =============
+{
+"totalrows": $count[0],
+"matchingtags": {},
+"tags" : [],
+"returnedrows":  $result.size(),
+"offset": $offset,
+"reqNo": $numbertool.toNumber($request.reqNo).intValue(),
+"sort": "$request.sort",
+"dir": "$request.dir",
+"rows": [
+#foreach($item in $result)
+{
+#if($item[4] == "")
+  #set($dueDate="")
+#else
+  #set($dueDate = $item[4])
+#end
+#set($checkbox = $escapetool.javascript("&lt;input name='checktask' type='checkbox' class='checktask-checkbox' data-page='$item[0]' value='$item[2]'"))
+#if($item[1]==1)#set($action = "${checkbox} title='${services.localization.render('reportchecktasks.macro.tooltip1')}' checked disabled/>")#else #set($action = "${checkbox} title='${services.localization.render('reportchecktasks.macro.tooltip0')}' disabled/>")#end
+#set($document = $xwiki.getDocument($item[0]))
+#set($pageLink = $escapetool.javascript("&lt;a href='$document.getURL()'>$document.title&lt;/a>"))
+#set($pageAnchor= $escapetool.javascript("&lt;a href='$document.getURL()#$item[2]'>$item[3]&lt;/a>"))
+#if($item[5]=="")
+  #set($name="")
+  #set($profile="")
+#else
+  #set($responsible=$xwiki.getDocument($item[5]))
+  #set($object = $responsible.getObject('XWiki.XWikiUsers'))
+  #set($name = "${object.get('first_name')} ${object.get('last_name')}")
+  #set($profile = $responsible.getURL())
+#end
+#if(!$item[4])
+  #set($dueDate = "")
+#else
+  ##Now format the due date to be printed in a readable and reasonable manner
+  #set($formatter = $xwiki.jodatime.getDateTimeFormatterForPattern(${services.localization.render('checktask.macro.dateFormat')}))
+  #set($dueDate = $datetool.toDate($xwiki.getXWikiPreference('dateformat','yyyy/MM/dd HH:mm'),$item[4]))
+  #set($dueDate = $formatter.print($dueDate))
+#end
+  "doc_viewable" : true,
+  "🗹" : "$action",
+  "done" : "#if($item[1])$item[1]#end",
+  "task" : "$pageAnchor",
+  "dueDate" : "$dueDate",
+  "responsible": "$name",
+  "profile": "$profile",
+  "page" : "$pageLink",
+  "space" : "$item[0]",  ##"$escapetool.javascript($xwiki.getURL($item[0], 'view'))",
+  "rid" : "$item[2]"
+}#if( $foreach.hasNext ),#end
+#end
+]
+}
+{{/velocity}}</content>
+</xwikidoc>

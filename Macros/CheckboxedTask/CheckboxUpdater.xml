@@ -1,0 +1,57 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<xwikidoc version="1.5" reference="Macros.CheckboxedTask.CheckboxUpdater" locale="">
+  <web>Macros.CheckboxedTask</web>
+  <name>CheckboxUpdater</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <creator>xwiki:XWiki.mittelba</creator>
+  <creationDate>1671560843000</creationDate>
+  <parent>WebHome</parent>
+  <author>xwiki:XWiki.mittelba</author>
+  <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
+  <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
+  <date>1671713063000</date>
+  <contentUpdateDate>1671713063000</contentUpdateDate>
+  <version>1.1</version>
+  <title>CheckboxUpdater</title>
+  <comment>Imported from XAR</comment>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+## If AJAX call
+#if("$!request.outputSyntax" != '')
+  $response.setContentType('application/json')
+  #set($page = $request.source)
+  ## First, create a reference to their user page
+  ##set($reference = $services.model.createDocumentReference('', "${request.space}", "${request.page}"))
+  ## Then, get its document
+  #set($document  = $xwiki.getDocument($request.page))
+  ## Then, get the 'Task' object
+  #set($object = $document.getObject('Macros.CheckboxedTask.TaskClass','rid',$request.task))
+  ## set task status
+  #if($request.checked == true)
+    #set($done =$services.localization.render('checktask.macro.result1'))
+    #set($descr ="$services.localization.render('checktask.macro.result0') ${request.task} $services.localization.render('checktask.macro.result1')")
+  #else
+    #set($done =$services.localization.render('checktask.macro.result2'))
+    #set($descr ="$services.localization.render('checktask.macro.result0') ${request.task} $services.localization.render('checktask.macro.result2')")
+  #end
+  #set($discard = $object.set('done',"${request.checked}"))
+  ##set($discard = $object.set('protected',"1"))
+  ##save doc
+  #set($discard = $document.save($descr,true))
+  #set($MyJsonData = {'task': "${request.task}", 'result': "${done}"})
+  $jsontool.serialize($MyJsonData)
+#else
+{{html wiki="true"}}
+  &lt;div class="alert alert-warning" role="alert">
+  This page is called by the AJAX checkbox update listener.
+  &lt;/div>
+{{/html}}
+#end
+
+
+{{/velocity}}</content>
+</xwikidoc>
