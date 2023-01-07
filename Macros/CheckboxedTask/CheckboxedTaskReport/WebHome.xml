@@ -11,9 +11,9 @@
   <author>xwiki:XWiki.mittelba</author>
   <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
   <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
-  <date>1673112164000</date>
+  <date>1673113430000</date>
   <contentUpdateDate>1671713063000</contentUpdateDate>
-  <version>3.17</version>
+  <version>3.18</version>
   <title>CheckboxedTaskReport</title>
   <comment/>
   <minorEdit>true</minorEdit>
@@ -464,6 +464,7 @@ require(['jquery'], function ($) {
   ##$sourceParams
   ##$filters
   ##$responsible
+  
   #if($xcontext.macro.params.filters)
     #set($filters = "$!xcontext.macro.params.filters")
   #end

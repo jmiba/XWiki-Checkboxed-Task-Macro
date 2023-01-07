@@ -10,9 +10,9 @@
   <author>xwiki:XWiki.mittelba</author>
   <originalMetadataAuthor>xwiki:XWiki.mittelba</originalMetadataAuthor>
   <contentAuthor>xwiki:XWiki.mittelba</contentAuthor>
-  <date>1673110239000</date>
-  <contentUpdateDate>1673110239000</contentUpdateDate>
-  <version>4.3</version>
+  <date>1673113120000</date>
+  <contentUpdateDate>1673113120000</contentUpdateDate>
+  <version>4.4</version>
   <title/>
   <comment/>
   <minorEdit>true</minorEdit>
@@ -34,9 +34,9 @@ rendering.macro.reportchecktasks.name=Task report
 rendering.macro.reportchecktasks.description=Insert a tick-off list of all tasks. Filter by user, page or page range.
 rendering.macro.reportchecktasks.parameter.responsible.name=Responsible
 rendering.macro.reportchecktasks.parameter.responsible.description=Tasks of this user:
-rendering.macro.reportchecktasks.parameter.page.name=Sapce
+rendering.macro.reportchecktasks.parameter.page.name=Space
 rendering.macro.reportchecktasks.parameter.page.description=Show tasks from this page and its subpages:
-rendering.macro.reportchecktasks.parameter.name=Completed
+rendering.macro.reportchecktasks.parameter.done.name=Completed
 rendering.macro.reportchecktasks.parameter.done.description=Set this value to 0 for uncompleted tasks or 1 for completed tasks. If you want to see both uncompleted and completed tasks in your report, set this value to 2. The default value for this setting is 0.
 rendering.macro.reportchecktasks.parameter.filters.descritption=Instead of fixed query parameters you can use adjustible filters for the query. Use this ifyou want a comprehensive filterabel task report. Use these parameters: done, responsible, dueDate, page. Concatenate them using &amp;. Example: done=0&amp;responsible=username&amp;dueDate=01.01.2023-31.03.2023&amp;page=Main.WebHome
 rendering.macro.reportchecktasks.parameter.project.name=Project or Workgroup
