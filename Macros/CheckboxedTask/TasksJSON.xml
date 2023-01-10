@@ -116,8 +116,8 @@
 ####################
 #set ($taskFilter = "%$!{request.task.toLowerCase()}%")
 #set ($responsibleFilter = "%$!{request.responsible}%")
-#set($dateFilter = "$!{request.dueDate}")
 #set($date = '')
+#set($dateFilter = "$!{request.dueDate}")
 #if("$!{dateFilter}" != '')
   #set($dates = $dateFilter.split('-'))
   #if($dates.size() == 2)
@@ -130,7 +130,7 @@
 #end
 #if (!$request.done) #set ($doneClause ="")#else #set($doneClause = " and task.done = "+"'$!{request.done}'")#end
 ## Compute the total number of entries
-#set ($countQuery="select count(doc.id) from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause $sortClause")
+#set ($countQuery="select count(doc.id) from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause")
 #set ($count = $services.query.xwql($countQuery).bindValue("taskFilter", $taskFilter).bindValue("responsibleFilter", $responsibleFilter).execute())
 ## Compute the entries to display
 #set ($resultsQuery="select doc.fullName, task.done, task.rid, task.task, task.dueDate, task.responsible from Document doc, doc.object(Macros.CheckboxedTask.TaskClass) as task where task.protected = '0' and (doc.fullName not like 'Sandbox.%'$inClause) and task.task like :taskFilter and task.responsible like :responsibleFilter $date $doneClause $hiddenClause $sortClause")
